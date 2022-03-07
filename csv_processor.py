@@ -16,6 +16,8 @@ def create_folders():
     csv_merchant_Octo_PATH = './csv_merchant_Octo'
     csv_product_Octo_PATH = './csv_product_Octo'
     concatenated_PATH = './concatenated'
+    concatenated_ASIN_PATH = './concatenated_ASIN'
+    concatenated_HTML_PATH='./concatenated_HTML'
 
     try:
         os.mkdir(csv_from_zon_PATH)
@@ -25,6 +27,8 @@ def create_folders():
         os.mkdir(csv_merchant_Octo_PATH)
         os.mkdir(csv_product_Octo_PATH)
         os.mkdir(concatenated_PATH)
+        os.mkdir(concatenated_ASIN_PATH)
+        os.mkdir(concatenated_HTML_PATH)
         print("Folders created!")
     except:
         print("Folders already created!")
@@ -86,8 +90,3 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
 
         # generate and export csv file
         df.to_csv(os.path.join(csv_from_zon_processed_PATH, file_name + '_processed.csv'))
-
-
-
-
-

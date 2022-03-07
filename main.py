@@ -1,4 +1,5 @@
 import csv_processor
+import concatenate
 
 
 def start_csv_processing():
@@ -9,8 +10,18 @@ def start_csv_processing():
                               product_url_PATH = "./csv_product_url",
                               csv_from_zon_processed_PATH = './csv_from_zon_processed')
 
+def start_concatenate():
+    concatenate.all(csv_merchant_Octo_PATH = './csv_merchant_octo',
+                    csv_product_Octo_PATH = './csv_product_octo',
+                    csv_from_zon_processed_PATH='./csv_from_zon_processed',
+                    concatenated_PATH='./concatenated',
+                    concatenated_ASIN_PATH='./concatenated_ASIN',
+                    concatenated_HTML_PATH='./concatenated_HTML')
+
 if __name__ == '__main__':
 
     start_csv_processing()
+
+    start_concatenate()
 
 
