@@ -18,8 +18,8 @@ def create_folders():
     concatenated_PATH = './concatenated'
     concatenated_ASIN_PATH = './concatenated_ASIN'
     concatenated_HTML_PATH='./concatenated_HTML'
-    blacklist_Merchant_PATH = './blacklist_merchant'
-    whitelist_Merchant_PATH = './whitelist_merchant'
+    blacklist_PATH = './blacklist'
+    whitelist_PATH = './whitelist'
 
     try:
         os.mkdir(csv_from_zon_PATH)
@@ -31,8 +31,8 @@ def create_folders():
         os.mkdir(concatenated_PATH)
         os.mkdir(concatenated_ASIN_PATH)
         os.mkdir(concatenated_HTML_PATH)
-        os.mkdir(blacklist_Merchant_PATH)
-        os.mkdir(whitelist_Merchant_PATH)
+        os.mkdir(blacklist_PATH)
+        os.mkdir(whitelist_PATH)
         print("Folders created!")
     except:
         print("Folders already created!")

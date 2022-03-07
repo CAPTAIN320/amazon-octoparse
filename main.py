@@ -1,5 +1,6 @@
 import csv_processor
 import concatenate
+import listing
 
 
 def start_csv_processing():
@@ -18,10 +19,19 @@ def start_concatenate():
                     concatenated_ASIN_PATH='./concatenated_ASIN',
                     concatenated_HTML_PATH='./concatenated_HTML')
 
+def create_lists():
+    listing.create_blacklist()
+
+    listing.create_whitelist()
+
+
+
 if __name__ == '__main__':
 
     start_csv_processing()
 
     start_concatenate()
+
+    create_lists()
 
 
