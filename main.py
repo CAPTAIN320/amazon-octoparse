@@ -24,6 +24,8 @@ def create_lists():
 
     listing.create_whitelist()
 
+    listing.create_whitelist_ASIN()
+
 
 
 if __name__ == '__main__':

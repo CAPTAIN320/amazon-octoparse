@@ -141,3 +141,35 @@ def create_whitelist(concatenated_PATH='./concatenated',
     df_whitelist_product_merged.to_csv(os.path.join(whitelist_PATH, 'Brand_whitelist.csv'),
                                             index=False)
 
+def create_whitelist_ASIN(concatenated_PATH='./concatenated',
+                          whitelist_PATH='./whitelist',
+                          whitelist_ASIN_PATH='./whitelist_ASIN'):
+
+    csv_files = glob.glob(concatenated_PATH + "/*.csv")
+
+    df_merchant_whitelist = pd.read_csv(os.path.join(whitelist_PATH, 'MerchantID_whitelist.csv'))
+    
+    for file in csv_files:
+        base_file_name = os.path.basename(file)
+        file_name = os.path.splitext(base_file_name)[0]
+        file_name = file_name[:-13]
+
+        print("Extracting ASINs from whitelisted Merchants in : "+ file_name)
+    
+        df = pd.read_csv(file)
+        
+        #retains only ASINs with a MerchantID
+        df = df[df["MerchantID"].notnull()]
+        
+        #create column to hold whitelisted boolean status
+        df["whitelisted"] = df["MerchantID"].isin(df_merchant_whitelist["MerchantID"])
+        
+        #retain rows that are in the whitelist
+        df_whitelist = df[df["whitelisted"] == True]
+        
+        print(df_whitelist)
+        df_whitelist["ASIN"].to_csv(os.path.join(whitelist_ASIN_PATH, 'ASIN_whitelist.csv'),
+                                            index=False)
+
+
+
