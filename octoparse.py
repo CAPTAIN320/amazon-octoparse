@@ -1,6 +1,7 @@
 import os
 import requests
 import csv
+import glob
 
 import util
 
@@ -165,8 +166,8 @@ def remove_task_data(base_url, token, task_id):
 
 
 
-# base_url = 'http://advancedapi.octoparse.com/'
-base_url = 'http://dataapi.octoparse.com/'
+
+base_url = 'http://advancedapi.octoparse.com/' # Use this url for anything control related
 user_name = 'tranceyos3077'
 password = 'ZUA6ewu5y'
 
@@ -180,41 +181,34 @@ task_id = '7692cb69-8caa-b03f-1d87-c871ac608049'
 
 # stop_task(base_url, token, task_id)
 
-
+base_url = 'http://dataapi.octoparse.com/' # Use this url for anything Data related
 # Get result from Octoparse
 result_data_size = get_data_by_offset(base_url, token, task_id)['data']['total']
 result_data =  get_data_by_offset(base_url, token, task_id, size=result_data_size)['data']['dataList']
 print(result_data)
 print(result_data_size)
 field_names = ['Page_URL', 'business_address']
+
+
+
 csv_merchant_Octo_PATH = './csv_merchant_octo'
-Path = './csv_merchant_octo'
-file_name = 'NAMES'
+merchant_url_PATH = "./csv_merchant_url"
 
-# Save result as csv file
-with open(Path+'/'+file_name+'.csv', 'w') as csvfile:
-    writer = csv.DictWriter(csvfile, fieldnames = field_names)
-    writer.writeheader()
-    writer.writerows(result_data)
-
-# Delete data in the task
-remove_task_data(base_url, token, task_id)
-
-
-csv_from_zon_processed_PATH='./csv_from_zon_processed'
-
-csv_files_merchant_OCTO = glob.glob(csv_merchant_Octo_PATH + "/*.csv")
-
-for file in csv_files_merchant_OCTO:
-
+csv_files = glob.glob(merchant_url_PATH+"/*_merchant_url.csv")
+# Save result for each file name
+for file in csv_files:
     base_file_name = os.path.basename(file)
     print(base_file_name)
-    file_name = os.path.splitext(base_file_name)[0]
-    file_name = file_name[:-14]
+    file_name = os.path.splitext(base_file_name)[0][:-13]
     
-    print("Processing & Merging: "+ file_name.title())
+    print("Saving Merchant ID Urls into file: "+ file_name.title() + "_merchant_octo.csv")
+    # Save result as csv file
+    with open(csv_merchant_Octo_PATH+'/'+file_name+'_merchant_octo.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames = field_names)
+        writer.writeheader()
+        writer.writerows(result_data)
 
-
-
+# Delete data in the task
+# remove_task_data(base_url, token, task_id)
 
 
