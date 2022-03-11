@@ -164,6 +164,27 @@ def remove_task_data(base_url, token, task_id):
         print(response['error_Description'])
         return response
 
+def add_url_or_text_item(base_url, token, task_id, action_name, property_value):
+        """Adding URL/Text to a Loop
+        
+        Use this method to add new URLs/text to an existing loop.
+
+        Arguments:
+                base_url {string} -- base url of the api
+                token {string} -- token string from a valid token entity
+                task_id {string} -- task id of a task from our platform
+                action_name {[type]} -- a unique combination name of an action and a parameter from a task, like 'navigateAction1.Url' or 'loopAction2.TextList'
+                property_value {[type]} -- value of the parameter to set
+        
+        Returns:
+                string -- remind message(include error if exists)
+        """
+        print('AddUrlOrTextToTask: ' + action_name) 
+        url = 'api/task/AddUrlOrTextToTask'
+        content = { 'taskId': task_id, 'name': action_name, 'value': property_value }
+        response = util.request_t_post(base_url, url, token, content)
+        print(response['error_Description'])
+        return response;
 
 
 
@@ -211,4 +232,6 @@ for file in csv_files:
 # Delete data in the task
 # remove_task_data(base_url, token, task_id)
 
-
+action_name = 'mSdECH8m'
+property_value = 'https://google.com'
+add_url_or_text_item(base_url, token, task_id, action_name, property_value)
