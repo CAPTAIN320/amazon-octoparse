@@ -12,29 +12,21 @@ def create_folders():
     csv_from_zon_PATH = './csv_from_zon'
     csv_from_zon_processed_PATH = './csv_from_zon_processed'
     csv_merchant_url_PATH = './csv_merchant_url'
-    csv_product_url_PATH = './csv_product_url'
     csv_merchant_Octo_PATH = './csv_merchant_Octo'
-    csv_product_Octo_PATH = './csv_product_Octo'
-    concatenated_PATH = './concatenated'
-    concatenated_ASIN_PATH = './concatenated_ASIN'
-    concatenated_HTML_PATH='./concatenated_HTML'
     blacklist_PATH = './blacklist'
     whitelist_PATH = './whitelist'
     whitelist_ASIN_PATH = './whitelist_ASIN'
+    csv_filtered_PATH = './csv_filtered'
 
     try:
         os.mkdir(csv_from_zon_PATH)
         os.mkdir(csv_from_zon_processed_PATH)
         os.mkdir(csv_merchant_url_PATH)
-        os.mkdir(csv_product_url_PATH)
         os.mkdir(csv_merchant_Octo_PATH)
-        os.mkdir(csv_product_Octo_PATH)
-        os.mkdir(concatenated_PATH)
-        os.mkdir(concatenated_ASIN_PATH)
-        os.mkdir(concatenated_HTML_PATH)
         os.mkdir(blacklist_PATH)
         os.mkdir(whitelist_PATH)
         os.mkdir(whitelist_ASIN_PATH)
+        os.mkdir(csv_filtered_PATH)
         print("Folders created!")
     except:
         print("Folders already created!")
@@ -43,7 +35,6 @@ def create_folders():
 # creates Merchant and Product urls
 def create_urls(csv_from_zon_PATH = "./csv_from_zon",
                 merchant_url_PATH = "./csv_merchant_url",
-                product_url_PATH = "./csv_product_url",
                 csv_from_zon_processed_PATH = './csv_from_zon_processed'):
     # Path of csv from ZonAsin
     csv_files = glob.glob(csv_from_zon_PATH+"/*.csv")
@@ -85,14 +76,6 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
                                             index=False)
         print("exported ",df_merchant_id["merchant_url"].count()," merchant urls")
 
-        # dataframe with only ASINs without a MerchantID
-        df_no_merchant_id = df[df["MerchantID"].isnull()]
-        # removes ASINs sold by Amazon
-        # print("There are ",df_no_merchant_id["SoldBy"].value_counts()["Amazon.com"]," Amazon.com")
-        df_no_merchant_id = df_no_merchant_id[df_no_merchant_id["SoldBy"].isnull()]
-        df_no_merchant_id["URL"].to_csv(os.path.join(product_url_PATH, file_name + '_product_url.csv'),
-                                            index=False)
-        print("exported ",df_no_merchant_id["URL"].count()," product urls")
-
         # generate and export csv file
         df.to_csv(os.path.join(csv_from_zon_processed_PATH, file_name + '_processed.csv'))
+

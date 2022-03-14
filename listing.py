@@ -81,33 +81,33 @@ def create_whitelist(concatenated_PATH='./concatenated',
     for file in csv_files:    
         country_array = ["US", "GB", "GR", "CA", "AU", "KR", "FR"]
 
-    for country in country_array:
-            base_file_name = os.path.basename(file)
-            file_name = os.path.splitext(base_file_name)[0]
-            file_name = file_name[:-13]
+        for country in country_array:
+                base_file_name = os.path.basename(file)
+                file_name = os.path.splitext(base_file_name)[0]
+                file_name = file_name[:-13]
 
-            print("Extracting whitelists from: "+ file_name)
+                print("Extracting whitelists from: "+ file_name)
 
-            df_concantenated = pd.read_csv(file)
-            #print(df_concantenated)
+                df_concantenated = pd.read_csv(file)
+                #print(df_concantenated)
 
-            df_merchant = df_concantenated[["MerchantID", 
-                                            "country_merchant_octo"]]
-            
-            df_product = df_concantenated[["Brand",
-                                        "country_product_octo"]]
-            
-            #get US rows from merchant_octo
-            df_whitelist_merchant = df_merchant.loc[df_merchant["country_merchant_octo"] == country]
-            #print(df_whitelist_merchant)
-            
-            whitelist_merchant_array.append(df_whitelist_merchant)
-            
-            #get US rows from product_octo
-            df_whitelist_product = df_product.loc[df_product["country_product_octo"] == country]
-            #print(df_whitelist_product)
-            
-            whitelist_product_array.append(df_whitelist_product)
+                df_merchant = df_concantenated[["MerchantID", 
+                                                "country_merchant_octo"]]
+                
+                df_product = df_concantenated[["Brand",
+                                            "country_product_octo"]]
+                
+                #get US rows from merchant_octo
+                df_whitelist_merchant = df_merchant.loc[df_merchant["country_merchant_octo"] == country]
+                #print(df_whitelist_merchant)
+                
+                whitelist_merchant_array.append(df_whitelist_merchant)
+                
+                #get US rows from product_octo
+                df_whitelist_product = df_product.loc[df_product["country_product_octo"] == country]
+                #print(df_whitelist_product)
+                
+                whitelist_product_array.append(df_whitelist_product)
     
     #merge whitelist of merchant IDs
     df_whitelist_merchant_merged = reduce(lambda  left,right: pd.merge(left,
