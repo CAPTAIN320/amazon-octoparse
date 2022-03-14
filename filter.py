@@ -5,42 +5,7 @@ import shutil
 
 import pandas as pd
 
-# Returns dataframe output of Merchant ID with Country
-def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo'):
 
-    csv_files_merchant_OCTO = glob.glob(csv_merchant_Octo_PATH + "/*.csv")
-
-    for file in csv_files_merchant_OCTO:
-
-        base_file_name = os.path.basename(file)
-        print(base_file_name)
-        file_name = os.path.splitext(base_file_name)[0]
-        file_name = file_name[:-14]
-
-        print("Processing Merchant Octo file: "+ file_name.title())
-
-        df_merchant_octo = pd.read_csv(os.path.join(csv_merchant_Octo_PATH, file_name + '_merchant_octo.csv'))
-    
-        merchant_id_octo = []
-        for url in df_merchant_octo["Page_URL"]:
-            merchant_id_from_url = url[41:-20]
-            merchant_id_octo.append(merchant_id_from_url)
-
-        df_merchant_octo["merchant_id_octo"] = merchant_id_octo
-        # print(df_merchant_octo["merchant_id_octo"])
-
-        df_merchant_octo["business_address"] = df_merchant_octo["business_address"].astype(str)
-        country_merchant_octo = []
-        for merchant_address in df_merchant_octo["business_address"]:
-            country_merchant = merchant_address[-2:]
-            country_merchant_octo.append(country_merchant)
-
-        df_merchant_octo["country_merchant_octo"] = country_merchant_octo
-
-        df = df_merchant_octo[["merchant_id_octo","country_merchant_octo"]]
-        print (df)
-
-        return df
 
 # merge product_octo with csv_processed
 # def csv_product_octo(csv_product_Octo_PATH = './csv_product_octo'):
@@ -99,14 +64,7 @@ def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo'):
 #                          "country_merchant_octo",
 #                          "country_product_octo"]]
 
-#     merge_df.to_html(os.path.join(concatenated_HTML_PATH, file_name + '.html'),
-#                      escape=False)
+#     merge_df.to_html(os.path.join(concatenated_H
 
 
-
-
-
-
-csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo')
-# csv_product_octo(csv_product_Octo_PATH = './csv_product_octo')
 

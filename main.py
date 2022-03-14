@@ -11,7 +11,7 @@ def start_csv_from_zon_processing():
                               csv_from_zon_processed_PATH = './csv_from_zon_processed')
 
 def start_csv_merchant_Octo_processing():
-    filter.csv_merchant_octo()
+    csv_processor.csv_merchant_octo()
 
 def create_lists():
     listing.create_blacklist()

@@ -13,6 +13,7 @@ def create_folders():
     csv_from_zon_processed_PATH = './csv_from_zon_processed'
     csv_merchant_url_PATH = './csv_merchant_url'
     csv_merchant_Octo_PATH = './csv_merchant_Octo'
+    csv_merchant_Octo_processed_PATH = './csv_merchant_Octo_processed'
     blacklist_PATH = './blacklist'
     whitelist_PATH = './whitelist'
     whitelist_ASIN_PATH = './whitelist_ASIN'
@@ -23,6 +24,7 @@ def create_folders():
         os.mkdir(csv_from_zon_processed_PATH)
         os.mkdir(csv_merchant_url_PATH)
         os.mkdir(csv_merchant_Octo_PATH)
+        os.mkdir(csv_merchant_Octo_processed_PATH)
         os.mkdir(blacklist_PATH)
         os.mkdir(whitelist_PATH)
         os.mkdir(whitelist_ASIN_PATH)
@@ -35,7 +37,13 @@ def create_folders():
 # creates Merchant and Product urls
 def create_urls(csv_from_zon_PATH = "./csv_from_zon",
                 merchant_url_PATH = "./csv_merchant_url",
-                csv_from_zon_processed_PATH = './csv_from_zon_processed'):
+                csv_from_zon_processed_PATH = './csv_from_zon_processed',
+                blacklist_File = './blacklist/MerchantID_blacklist.csv',
+                whitelist_File = './whitelist/MerchantID_whitelist.csv'):
+    
+    df_blacklist = pd.read_csv(blacklist_File)
+    df_whitelist = pd.read_csv(whitelist_File)
+    
     # Path of csv from ZonAsin
     csv_files = glob.glob(csv_from_zon_PATH+"/*.csv")
     for file in csv_files:
@@ -79,3 +87,42 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
         # generate and export csv file
         df.to_csv(os.path.join(csv_from_zon_processed_PATH, file_name + '_processed.csv'))
 
+
+# Returns dataframe output of Merchant ID with Country
+def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo'):
+
+    csv_files_merchant_OCTO = glob.glob(csv_merchant_Octo_PATH + "/*.csv")
+
+    for file in csv_files_merchant_OCTO:
+
+        base_file_name = os.path.basename(file)
+        print(base_file_name)
+        file_name = os.path.splitext(base_file_name)[0]
+        file_name = file_name[:-14]
+
+        print("Processing Merchant Octo file: "+ file_name.title())
+
+        df_merchant_octo = pd.read_csv(os.path.join(csv_merchant_Octo_PATH, file_name + '_merchant_octo.csv'))
+    
+        merchant_id_octo = []
+        for url in df_merchant_octo["Page_URL"]:
+            merchant_id_from_url = url[41:-20]
+            merchant_id_octo.append(merchant_id_from_url)
+
+        df_merchant_octo["merchant_id_octo"] = merchant_id_octo
+        # print(df_merchant_octo["merchant_id_octo"])
+
+        df_merchant_octo["business_address"] = df_merchant_octo["business_address"].astype(str)
+        country_merchant_octo = []
+        for merchant_address in df_merchant_octo["business_address"]:
+            country_merchant = merchant_address[-2:]
+            country_merchant_octo.append(country_merchant)
+
+        df_merchant_octo["country_merchant_octo"] = country_merchant_octo
+
+        df = df_merchant_octo[["merchant_id_octo","country_merchant_octo"]]
+        print (df)
+
+        return df
+
+csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo')
