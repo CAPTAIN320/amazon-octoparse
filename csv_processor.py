@@ -43,7 +43,7 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
     
     df_blacklist = pd.read_csv(blacklist_File)
     df_whitelist = pd.read_csv(whitelist_File)
-    
+
     # Path of csv from ZonAsin
     csv_files = glob.glob(csv_from_zon_PATH+"/*.csv")
     for file in csv_files:
@@ -78,8 +78,11 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
         
         df["merchant_url"] = merchant_url_array
 
-        # datafram with only ASINs with a MerchantID
+        # dataframe with only ASINs with a MerchantID
         df_merchant_id = df[df["MerchantID"].notnull()]
+
+        
+
         df_merchant_id["merchant_url"].to_csv(os.path.join(merchant_url_PATH, file_name + '_merchant_url.csv'),
                                             index=False)
         print("exported ",df_merchant_id["merchant_url"].count()," merchant urls")
@@ -88,8 +91,9 @@ def create_urls(csv_from_zon_PATH = "./csv_from_zon",
         df.to_csv(os.path.join(csv_from_zon_processed_PATH, file_name + '_processed.csv'))
 
 
-# Returns dataframe output of Merchant ID with Country
-def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo'):
+# Returns csv output of Merchant ID with Country
+def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo',
+                      csv_merchant_Octo_processed_PATH = './csv_merchant_Octo_processed'):
 
     csv_files_merchant_OCTO = glob.glob(csv_merchant_Octo_PATH + "/*.csv")
 
@@ -120,9 +124,13 @@ def csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo'):
 
         df_merchant_octo["country_merchant_octo"] = country_merchant_octo
 
-        df = df_merchant_octo[["merchant_id_octo","country_merchant_octo"]]
+        df = pd.DataFrame()
+        # df["MerchantID", "country_merchant_octo"] = df_merchant_octo[["merchant_id_octo","country_merchant_octo"]]
+        df["MerchantID"] = df_merchant_octo["merchant_id_octo"]
+        df["country_merchant_octo"] = df_merchant_octo["country_merchant_octo"]
         print (df)
 
-        return df
+        # generate and export csv file
+        return df.to_csv(os.path.join(csv_merchant_Octo_processed_PATH, file_name + '.csv'), index=False)
 
-csv_merchant_octo(csv_merchant_Octo_PATH = './csv_merchant_octo')
+create_urls()

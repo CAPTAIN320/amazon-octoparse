@@ -5,23 +5,24 @@ import pandas as pd
 import os
 from functools import reduce
 
-def create_blacklist(concatenated_PATH='./concatenated',
-                     blacklist_PATH='./blacklist'):
-    csv_files = glob.glob(concatenated_PATH + "/*.csv")
+def create_blacklist(blacklist_PATH='./blacklist',
+                     csv_merchant_Octo_processed_PATH = './csv_merchant_Octo_processed'):
+
+    csv_files = glob.glob(csv_merchant_Octo_processed_PATH + "/*.csv")
 
     blacklist_merchant_array = []
     for file in csv_files:
         base_file_name = os.path.basename(file)
         file_name = os.path.splitext(base_file_name)[0]
-        file_name = file_name[:-13]
+        # file_name = file_name[:-13]
 
         print("Extracting blacklists from: "+ file_name.title())
         
-        df_concantenated = pd.read_csv(file)
+        df = pd.read_csv(file)
         # print(df_concantenated)
+        print(file)
 
-        df_merchant = df_concantenated[["MerchantID", 
-                                        "country_merchant_octo"]]
+        df_merchant = df[["MerchantID","country_merchant_octo"]]
         
         # get Chinese rows from merchant_octo
         df_blacklist_merchant = df_merchant.loc[df_merchant["country_merchant_octo"] == "CN"]
@@ -46,10 +47,10 @@ def create_blacklist(concatenated_PATH='./concatenated',
                                         index=False)
     print(df_blacklist_merchant_merged)
 
-def create_whitelist(concatenated_PATH='./concatenated',
-                     whitelist_PATH='./whitelist'):
+def create_whitelist(whitelist_PATH='./whitelist',
+                     csv_merchant_Octo_processed_PATH = './csv_merchant_Octo_processed'):
 
-    csv_files = glob.glob(concatenated_PATH + "/*.csv")
+    csv_files = glob.glob(csv_merchant_Octo_processed_PATH + "/*.csv")
 
     whitelist_merchant_array = []
     for file in csv_files:    
@@ -58,15 +59,14 @@ def create_whitelist(concatenated_PATH='./concatenated',
         for country in country_array:
                 base_file_name = os.path.basename(file)
                 file_name = os.path.splitext(base_file_name)[0]
-                file_name = file_name[:-13]
+                # file_name = file_name[:-13]
 
                 print("Extracting whitelists from: "+ file_name)
 
-                df_concantenated = pd.read_csv(file)
+                df = pd.read_csv(file)
                 #print(df_concantenated)
 
-                df_merchant = df_concantenated[["MerchantID", 
-                                                "country_merchant_octo"]]
+                df_merchant = df[["MerchantID","country_merchant_octo"]]
                 
                 #get US rows from merchant_octo
                 df_whitelist_merchant = df_merchant.loc[df_merchant["country_merchant_octo"] == country]
@@ -120,6 +120,3 @@ def create_whitelist_ASIN(concatenated_PATH='./concatenated',
         print(df_whitelist)
         df_whitelist["ASIN"].to_csv(os.path.join(whitelist_ASIN_PATH, 'ASIN_whitelist.csv'),
                                             index=False)
-
-
-
